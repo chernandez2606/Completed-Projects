@@ -1,0 +1,24 @@
+def roundsd(number, prec):
+	if prec < 0:
+		raise RuntimeError, 'Precision must be non-negative'
+	
+	#for matrices
+	#recursively applies roundsd until it reaches each element in rows
+	if isinstance(number,types.ListType):
+		return [roundsd(x,prec) for x in number]
+	
+	#for floats
+	#moves decimal point all the way to the left and calls round()
+	#with precision of prec, then moves the decimal back.
+	#float to string to substring to float conversion needed to 
+	#subvert the problem of binary representation of floats and
+	#round to precision as advertised
+	if isinstance(number,types.FloatType) \
+		or isinstance(number,types.IntType):
+			count = 0
+			while math.fabs(number) > 1:
+				number = number/10.0
+				count = count + 1
+			str_num = str( round(number, prec) * math.pow(10,count) )
+			str_num = str_num[:prec + 3]
+			return float(str_num)
