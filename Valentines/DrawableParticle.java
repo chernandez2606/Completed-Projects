@@ -1,3 +1,8 @@
+/*
+ * Drawable Particle draws a representation of a Particle onto
+ * a 2D canvas
+ */ 
+
 import java.awt.Color;
 import java.awt.Graphics;
 

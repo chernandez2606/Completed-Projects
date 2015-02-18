@@ -1,10 +1,10 @@
-
-
-//Name -
-//Date -
-//Class -
-//Lab  -
-
+/*
+ * Author - Carlo Hernandez
+ * Graphic World draws all the needed Particles onto the canvas and
+ * updates them as needed. Graphic World also alows users to give input
+ * to the program to create and move a negative gravity particle to push
+ * particles around their mice
+ */
 
 import java.awt.image.*;
 import java.io.*;
@@ -15,21 +15,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 
-//import java.awt.Font;
-//import java.awt.Color;
-//import java.awt.Graphics;
-//import java.awt.Graphics2D;
-//import java.awt.Canvas;
-//import javax.swing.JPanel;
-
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.util.Scanner;
-
 public class GraphicWorld extends JPanel implements Runnable {
 	private GraphicParticle[] particles;
 	private GravityParticle[] g_particles;
-	private UserGravParticle user_p;
+	private GravityParticle user_p;
 	private World my_world;
 	//~ private int count = 0;
 
@@ -64,6 +53,9 @@ public class GraphicWorld extends JPanel implements Runnable {
 			//~ g.draw(window);
 	}
 	
+	/*
+	 * Paints particles onto the canvas based on their location.
+	 */
 	public void run() {
 		try {	
 			while(true){
@@ -74,29 +66,31 @@ public class GraphicWorld extends JPanel implements Runnable {
 			System.out.print(e);
 		}
 	}
-
+	
+	/*
+	 *	Mouse Listener to detect the position and click status of the 
+	 * 	mouse. Sets the position of the user particle to mouse position
+	 * 	and activates the gravity field around it.
+	 */
 	class Mousy implements MouseListener{
 		public void mouseClicked(MouseEvent e) {
-			//statusLabel.setText("Mouse Clicked: ("+e.getX()+", "+e.getY() +")");
-			user_p.setStatus(false);
-			user_p.setX(e.getX());
-			user_p.setY(e.getY());
+			my_world.setStatus(false);
 		}
 
 		public void mousePressed(MouseEvent e) {
-			user_p.setStatus(true);
+			my_world.setStatus(true);
 			user_p.setX(e.getX());
 			user_p.setY(e.getY());
 		}
 		
 		public void mouseDragged(MouseEvent e){
-			user_p.setStatus(true);
+			my_world.setStatus(true);
 			user_p.setX(e.getX());
 			user_p.setY(e.getY());
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			user_p.setStatus(false);
+			my_world.setStatus(false);
 		}
 
 		public void mouseEntered(MouseEvent e) {

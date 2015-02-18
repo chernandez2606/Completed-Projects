@@ -1,6 +1,12 @@
+/*
+ * Graphic Particle is a Particle that is drawable on a canvas and can 
+ * be moved by a set speed. It also can give back its future location
+ * before it moves.
+ */ 
+
 import java.awt.Color;
 import java.awt.Graphics;
-
+ 
 class GraphicParticle extends DrawableParticle{
 	private double xspd, yspd;
 	

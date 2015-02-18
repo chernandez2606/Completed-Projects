@@ -1,3 +1,9 @@
+/*
+ * GravityParticle is a particle that attracts the other particles
+ * This particle can be drawn onto a canvas for reference but cannot be
+ * moved by other particles.
+ */
+
 class GravityParticle extends DrawableParticle{
 	private double acc;
 	
@@ -22,6 +28,9 @@ class GravityParticle extends DrawableParticle{
 		double out[] = {0.0, 0.0};
 		if (this.inside(x))
 			return out;
+		
+		//these two calculations are used instead of sin and cos
+		//since arctan gives limited values
 		out[0]=-acc*(x[0]-this.getX())/getZ(x);
 		out[1]=-acc*(x[1]-this.getY())/getZ(x);
 		

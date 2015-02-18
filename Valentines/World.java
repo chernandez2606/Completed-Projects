@@ -1,3 +1,11 @@
+/*
+ * World is where the objects reside. Most of the calculations for the 
+ * position, speed, and collisions of the particles are done in a thread
+ * that runs in this class. It also determines the number and location
+ * of gravity particles using an image and associates a random graphic
+ * particle with each gravity particle
+ */ 
+
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
@@ -7,15 +15,19 @@ import java.awt.Color;
 class World implements Runnable{
 	private GraphicParticle[] particles;
 	private GravityParticle[] g_particles;
-	private UserGravParticle user_p;
+	private GravityParticle user_p;
+	private boolean isActive;
 	private int w,h;
-	private double size = 20.0, maxSpd = 4;
+	private double size, maxSpd;
 	
 	
 	public World(int width, int height){
 		w = width;
 		h = height;
-		user_p = new UserGravParticle(0,0,1);
+		size = 20.0; 
+		maxSpd = 4;
+		
+		user_p = new GravityParticle(0,0,2,-1.5);
 		
 		g_particles = setGravityField(new File("PicTest.bmp"));
 		System.out.println(g_particles.length);
@@ -24,16 +36,17 @@ class World implements Runnable{
 		for (int x = 0; x < particles.length; x++)
 			particles[x] = randStart();
 		
+		
+		isActive = false;
 		new Thread(this).start();
 	}
 	
 	public void update(){
-		collisionCheck();
 		for (int i = 0; i < particles.length; i++){
 			GraphicParticle p = particles[i];
 			GravityParticle g = g_particles[i];
 			double[] usrAcc = {0.0, 0.0};
-			if( user_p.isActive())
+			if(isActive)
 				usrAcc = user_p.getAcc(p.getPos());
 			double[] spd = p.getSpd();
 			double[] acc = g.getAcc(p.getPos());
@@ -41,8 +54,10 @@ class World implements Runnable{
 			for (int x = 0; x < 2; x++)
 				spd[x] = (spd[x] + acc[x]+ usrAcc[x]) * .99;
 			p.setSpd(spd);
-			p.move();
 		}
+		collisionCheck();
+		for(GraphicParticle p: particles)
+			p.move();
 	}
 	
 	public void wallCheck(){
@@ -115,8 +130,15 @@ class World implements Runnable{
 		return g_particles;
 	}
 	
-	public UserGravParticle getUserParticle(){
+	public GravityParticle getUserParticle(){
 		return user_p;
+	}
+	
+	public boolean getStatus(){
+		return isActive;
+	}
+	public void setStatus(boolean stat){
+		isActive = stat;
 	}
 	
 	public void run() {
